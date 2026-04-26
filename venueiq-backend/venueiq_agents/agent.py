@@ -84,14 +84,16 @@ def get_match_data() -> str:
 def fetch_food_vendors():
     """Fetches the list of active food and snack vendors in the stadium."""
     db = get_db()
-    docs = db.collection("venue_zones").where("zone_type", "==", "food").stream()
+    from google.cloud.firestore_v1.base_query import FieldFilter
+    docs = db.collection("venue_zones").where(filter=FieldFilter("zone_type", "==", "food")).stream()
     return json.dumps([d.to_dict() for d in docs], default=str)
 
 def fetch_venue_amenities():
     """Fetches info about restrooms, medical rooms, and lost & found."""
     db = get_db()
+    from google.cloud.firestore_v1.base_query import FieldFilter
     # Firestore 'in' queries are limited to 10 items
-    docs = db.collection("venue_zones").where("zone_type", "in", ["toilet", "medical", "retail"]).stream()
+    docs = db.collection("venue_zones").where(filter=FieldFilter("zone_type", "in", ["toilet", "medical", "retail"])).stream()
     return json.dumps([d.to_dict() for d in docs], default=str)
 
 # ─── AGENTS ─────────────────────────────────────────────

@@ -2,6 +2,7 @@ import os
 import json
 import datetime
 import asyncio
+import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request, Response
@@ -27,10 +28,38 @@ from cricket_api import (
     get_best_match
 )
 
+FAST_CACHE_TTL_SECONDS = int(os.getenv("FAST_CACHE_TTL_SECONDS", "30"))
+_fast_cache: dict[str, object] = {}
+_fast_cache_timestamps: dict[str, float] = {}
+
+def _cache_get(key: str):
+    timestamp = _fast_cache_timestamps.get(key)
+    if timestamp and (time.time() - timestamp) < FAST_CACHE_TTL_SECONDS:
+        return _fast_cache.get(key)
+    return None
+
+def _cache_set(key: str, value: object):
+    _fast_cache[key] = value
+    _fast_cache_timestamps[key] = time.time()
+    return value
+
+def warm_fast_cache():
+    """Prime Firestore-backed fast responses so first user chat is not slow."""
+    try:
+        db = get_db()
+        match_doc = db.collection("match_data").document("current_match").get()
+        _cache_set("match", match_doc.to_dict() if match_doc.exists else {})
+        _cache_set("venue_zones", [doc.to_dict() for doc in db.collection("venue_zones").stream()])
+        _cache_set("crowd_data", [doc.to_dict() for doc in db.collection("crowd_data").stream()])
+        print("[VenueIQ] Fast concierge cache warmed.")
+    except Exception as exc:
+        print(f"[VenueIQ] Fast cache warm skipped: {exc}")
+
 # ─── FastAPI App ─────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("[VenueIQ] API starting up (Lightweight Mode)...")
+    warm_fast_cache()
     yield
     print("[VenueIQ] API shutting down...")
 
@@ -76,12 +105,119 @@ def select_chat_agent(message: str):
         return match_agent
     return root_agent
 
+def _read_numeric(data: dict, keys: tuple[str, ...], default: int = 0) -> int:
+    for key in keys:
+        value = data.get(key)
+        if value is None:
+            continue
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            continue
+    return default
+
+def _format_match_fast_response(match: dict) -> str:
+    team1 = match.get("team1", {})
+    team2 = match.get("team2", {})
+    if not team1:
+        return "No live match data is available right now."
+
+    team1_name = team1.get("name", "Team 1")
+    team1_short = team1.get("short", team1_name)
+    team2_name = team2.get("name", "Team 2")
+    score = team1.get("score", "N/A")
+    overs = team1.get("overs", "N/A")
+    top_scorer = team1.get("top_scorer")
+    status = match.get("status", "Live")
+
+    response = f"{team1_name} ({team1_short}) are {score} after {overs} overs against {team2_name}. {status}"
+    if top_scorer and top_scorer != "—":
+        response += f" Top scorer: {top_scorer}."
+    return response
+
+def _format_food_fast_response(zones: list[dict]) -> str:
+    food_zones = [
+        zone for zone in zones
+        if zone.get("type") == "food" or zone.get("zone_type") == "food"
+    ]
+    if not food_zones:
+        return "I could not find live food-court queue data right now."
+
+    best = min(food_zones, key=lambda zone: _read_numeric(zone, ("wait_minutes", "current_wait_mins", "wait_time"), 999))
+    wait = _read_numeric(best, ("wait_minutes", "current_wait_mins", "wait_time"), 0)
+    name = best.get("name") or best.get("zone_id") or "the nearest food court"
+    gate = best.get("gate_nearest")
+    items = best.get("menu_items") or best.get("popular_items") or []
+
+    response = f"The shortest food queue is at {name} with about a {wait}-minute wait."
+    if gate:
+        response += f" It is nearest to {gate}."
+    if items:
+        response += f" Popular options include {', '.join(items[:3])}."
+    return response
+
+def _format_gate_fast_response(gates: list[dict]) -> str:
+    public_gates = [gate for gate in gates if not gate.get("is_vip_only")]
+    if not public_gates:
+        return "I could not find live gate data right now."
+
+    best = min(public_gates, key=lambda gate: _read_numeric(gate, ("exit_wait_minutes", "entry_wait_minutes", "wait_minutes"), 999))
+    wait = _read_numeric(best, ("exit_wait_minutes", "entry_wait_minutes", "wait_minutes"), 0)
+    name = best.get("display_name") or best.get("gate_id") or "the clearest gate"
+    status = best.get("current_status") or best.get("density")
+    recommendation = best.get("recommendation_text")
+
+    response = f"The quickest exit option is {name} with about a {wait}-minute wait."
+    if status:
+        response += f" Current status: {status}."
+    if recommendation:
+        response += f" {recommendation}"
+    return response
+
+def get_fast_concierge_response(message: str) -> str | None:
+    """Return low-latency answers for common match-day queries."""
+    lowered = message.lower()
+    try:
+        if any(term in lowered for term in ("score", "match", "cricket", "batting", "wicket", "over")):
+            match = _cache_get("match")
+            if match is None:
+                db = get_db()
+                doc = db.collection("match_data").document("current_match").get()
+                match = _cache_set("match", doc.to_dict() if doc.exists else {})
+            return _format_match_fast_response(match)
+
+        if any(term in lowered for term in ("food", "snack", "drink", "queue", "shortest")):
+            zones = _cache_get("venue_zones")
+            if zones is None:
+                db = get_db()
+                zones = _cache_set("venue_zones", [doc.to_dict() for doc in db.collection("venue_zones").stream()])
+            return _format_food_fast_response(zones)
+
+        if any(term in lowered for term in ("exit", "gate", "crowd", "least crowded", "quickest")):
+            gates = _cache_get("crowd_data")
+            if gates is None:
+                db = get_db()
+                gates = _cache_set("crowd_data", [doc.to_dict() for doc in db.collection("crowd_data").stream()])
+            return _format_gate_fast_response(gates)
+    except Exception as exc:
+        print(f"[Fast Concierge Error] {exc}")
+    return None
+
 # ─── Chat Endpoint ───────────────────────────────────────
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
     """Main chat endpoint — routes to the VenueIQ Agentic Mesh with Streaming."""
     print(f"[Chat Request] Session: {request.session_id} | Message: {request.message}")
+    fast_response = get_fast_concierge_response(request.message)
+    if fast_response:
+        print("[Chat Routing] Fast response")
+
+        async def fast_event_generator():
+            yield fast_response
+
+        return StreamingResponse(fast_event_generator(), media_type="text/plain")
+
     selected_agent = select_chat_agent(request.message)
     print(f"[Chat Routing] Selected agent: {selected_agent.name}")
     

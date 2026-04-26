@@ -60,3 +60,37 @@ Cloud Run readiness notes:
 - Backend startup works but depends on Google Cloud credentials, Firestore access, Vertex AI access, and `CRICKETDATA_API_KEY`.
 - Common food and match chat intents now route deterministically before Cloud Run deployment.
 - Keep `.env`, server logs, `dist`, `node_modules`, and Python caches out of deployment source.
+
+## Cloud Run Deployment Pass
+
+- [x] Measure concierge response latency and inspect runtime errors.
+- [x] Add deployment packaging for backend and frontend.
+- [x] Verify production build/container assumptions locally where possible.
+- [x] Deploy backend to Cloud Run.
+- [x] Deploy frontend to Cloud Run using the backend service URL.
+- [x] Smoke test deployed services.
+- [x] Commit and push deployment configuration.
+
+Deployment results:
+
+- Backend Cloud Run URL: `https://venueiq-backend-857911435032.us-central1.run.app`
+- Frontend Cloud Run URL: `https://venueiq-frontend-857911435032.us-central1.run.app`
+- Backend revision: `venueiq-backend-00001-4l4`
+- Frontend revision: `venueiq-frontend-00001-sgg`
+
+Verification performed:
+
+- Frontend local lint passed.
+- Frontend local production build passed outside the Windows sandbox.
+- Backend syntax compilation passed.
+- Backend deployed `/health` returned `{"status":"ok","mode":"lightweight"}`.
+- Backend deployed `/api/matches/primary` returned a successful match payload.
+- Backend deployed `/chat` returned a live-score response for `What is the live score?`.
+- Frontend deployed `/health` returned `ok`.
+- Frontend deployed `/` returned HTTP 200 HTML.
+- Frontend deployed JavaScript bundle contains the deployed backend URL.
+
+Notes:
+
+- Local Docker build could not run because Docker Desktop's Linux engine was not running.
+- Cloud Build successfully built the frontend container from `cloudbuild.yaml`.
