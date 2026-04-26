@@ -32,3 +32,31 @@ Results:
 Remaining note:
 
 - Full live AI and Firestore behavior still depends on valid Google Cloud credentials, a configured `CRICKETDATA_API_KEY`, and seeded Firestore data.
+
+## Local Server Verification
+
+- [x] Start FastAPI backend on port `8080`.
+- [x] Start Vite frontend on port `5173`.
+- [x] Verify backend health and API routes.
+- [x] Verify frontend loads from the browser/dev server.
+- [x] Verify frontend can reach backend-dependent workflows.
+- [x] Record deployment-readiness notes for Cloud Run.
+
+Local verification results:
+
+- Backend running at `http://127.0.0.1:8080`.
+- Frontend running at `http://127.0.0.1:5173`.
+- `GET /health` returned `{"status":"ok","mode":"lightweight"}`.
+- `GET /api/matches/primary` returned a live transformed cricket match.
+- `GET /admin/incidents` returned Firestore incident data.
+- `POST /chat` returned useful MatchAgent and FoodAgent responses.
+- Browser check confirmed the landing page and chat UI render without console errors.
+- Frontend `npm run lint` passed.
+- Frontend `npm run build` passed.
+- Backend syntax compilation and FastAPI import checks passed.
+
+Cloud Run readiness notes:
+
+- Backend startup works but depends on Google Cloud credentials, Firestore access, Vertex AI access, and `CRICKETDATA_API_KEY`.
+- Common food and match chat intents now route deterministically before Cloud Run deployment.
+- Keep `.env`, server logs, `dist`, `node_modules`, and Python caches out of deployment source.

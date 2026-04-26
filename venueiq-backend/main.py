@@ -18,7 +18,7 @@ PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT", "kaggle-5b-478308").strip()
 LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1").strip()
 
 # Import agents (now lightweight)
-from venueiq_agents.agent import root_agent, get_db
+from venueiq_agents.agent import root_agent, food_agent, match_agent, get_db
 
 from cricket_api import (
     fetch_current_matches,
@@ -64,18 +64,32 @@ class ChatResponse(BaseModel):
 class IncidentStatusUpdate(BaseModel):
     status: str
 
+def select_chat_agent(message: str):
+    """Route obvious demo-critical intents without relying on model self-transfer."""
+    lowered = message.lower()
+    food_terms = ("food", "snack", "drink", "queue", "shortest", "toilet", "restroom")
+    match_terms = ("score", "match", "cricket", "batting", "bowling", "wicket", "over", "prediction")
+
+    if any(term in lowered for term in food_terms):
+        return food_agent
+    if any(term in lowered for term in match_terms):
+        return match_agent
+    return root_agent
+
 # ─── Chat Endpoint ───────────────────────────────────────
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
     """Main chat endpoint — routes to the VenueIQ Agentic Mesh with Streaming."""
     print(f"[Chat Request] Session: {request.session_id} | Message: {request.message}")
+    selected_agent = select_chat_agent(request.message)
+    print(f"[Chat Routing] Selected agent: {selected_agent.name}")
     
     async def event_generator():
         try:
             # We call the root agent. It yields candidate chunks.
             # The lightweight_lib handles tool calls and agent transfers internally.
-            async for cand in root_agent.run(request.message):
+            async for cand in selected_agent.run(request.message):
                 if "content" in cand and "parts" in cand["content"]:
                     for part in cand["content"]["parts"]:
                         if "text" in part:
