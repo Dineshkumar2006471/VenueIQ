@@ -1,0 +1,90 @@
+:root {
+  /* Premium Palette */
+  --color-black: #050505;
+  --color-white: #FFFFFF;
+  --color-accent: #FF3B30; /* High-intensity Red */
+  --color-deep-blue: #0A1128;
+  --color-glass: rgba(255, 255, 255, 0.05);
+  --color-border: #000000;
+  
+  /* Typography */
+  --font-display: 'Syne', sans-serif; /* Wide, high-impact */
+  --font-heading: 'Fraunces', serif; /* Editorial elegance */
+  --font-body: 'Space Grotesk', sans-serif; /* Modern, clean */
+  --font-data: 'Orbitron', sans-serif; /* High-tech numerical font */
+  
+  --max-width: 1440px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.uppercase { text-transform: uppercase; }
+
+/* ─── Global Reveal Animations ───────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+/* ─── Shared Components ─────────────────────────────────────── */
+
+.section-label {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--color-black);
+  margin-bottom: 24px;
+  position: relative;
+  padding-left: 30px;
+}
+
+.section-label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+}

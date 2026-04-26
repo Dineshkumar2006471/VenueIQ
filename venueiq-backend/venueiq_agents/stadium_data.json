@@ -1,0 +1,40 @@
+{
+  "narendra_modi_stadium": {
+    "name": "Narendra Modi Stadium",
+    "city": "Ahmedabad",
+    "state": "Gujarat",
+    "country": "India",
+    "capacity": 132000,
+    "current_attendance": 84000,
+    "active_match": "Gujarat Titans vs Mumbai Indians",
+    "match_date": "2025-04-20",
+    "match_phase": "innings_break",
+    "total_gates": 11,
+    "total_stands": 8,
+    "total_levels": 3,
+    "facilities": {
+      "food_courts": 18,
+      "toilet_blocks": 22,
+      "medical_rooms": 3,
+      "atm_counters": 8,
+      "merchandise_stores": 6
+    },
+    "coordinates": {
+      "lat": 23.0902,
+      "lng": 72.5952
+    },
+    "qr_code_url": "https://venueiq.app/narendra-modi-stadium",
+    "vip_gates": ["Gate 7"],
+    "food_vendors": [
+      {"name": "Gujarati Delights", "location": "Level 1, Block A", "specialty": "Dhokla, Khandvi", "status": "open"},
+      {"name": "Stadium Snacks", "location": "All Levels", "specialty": "Popcorn, Samosa, Cold Drinks", "status": "open"},
+      {"name": "Pizza Express", "location": "Level 2, South Stand", "specialty": "Pizza, Garlic Bread", "status": "limited_stock"},
+      {"name": "Desi Chai", "location": "Gate 4, Gate 9", "specialty": "Masala Chai, Biscuits", "status": "open"}
+    ],
+    "amenities": {
+      "lost_and_found": "Gate 1 Office",
+      "first_aid": "Block C, Level 1",
+      "restrooms": "Available every 50 meters in all concourses"
+    }
+  }
+}

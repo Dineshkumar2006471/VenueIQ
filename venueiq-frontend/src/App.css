@@ -1,0 +1,135 @@
+/* ─── App Layout: Navbar with Centered Links ─────────────────── */
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 1000;
+  background: #FFFFFF;
+  border-bottom: 1px solid #000000;
+  transition: all 0.3s ease;
+}
+
+.app-header.scrolled {
+  height: 72px;
+  border-bottom-width: 2px;
+}
+
+.header-inner {
+  display: grid;
+  grid-template-columns: 250px 1fr 250px;
+  align-items: center;
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ─── Left: Logo ────────────────────────────────────────── */
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #000;
+}
+
+.logo-icon {
+  color: #000;
+  display: flex;
+  align-items: center;
+}
+
+.logo-name {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+/* ─── Center: Nav ───────────────────────────────────────── */
+.header-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link {
+  padding: 10px 20px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #666;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.nav-link:hover {
+  color: #000;
+}
+
+.nav-link.active {
+  color: #000;
+  background: #F0F0F0;
+}
+
+/* ─── Right: CTA ────────────────────────────────────────── */
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-cta-btn {
+  background: #000;
+  color: #FFF;
+  padding: 12px 28px;
+  border: 1px solid #000;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.header-cta-btn:hover {
+  background: #FFF;
+  color: #000;
+}
+
+/* ─── Mobile ────────────────────────────────────────────── */
+.menu-toggle {
+  display: none;
+  padding: 8px;
+}
+
+.app-main {
+  flex: 1;
+  padding-top: 80px;
+}
+
+@media (max-width: 900px) {
+  .header-inner {
+    grid-template-columns: 1fr auto;
+    padding: 0 20px;
+  }
+  .header-nav, .header-right {
+    display: none;
+  }
+  .menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    color: #000;
+  }
+}

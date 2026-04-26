@@ -1,0 +1,349 @@
+.match-container {
+  padding-top: 80px;
+  background: var(--color-white);
+  min-height: 100vh;
+}
+
+/* ─── Scoreboard ─────────────────────────────────────────── */
+
+.scoreboard-section {
+  position: relative;
+  max-width: var(--max-width);
+  margin: 0 auto 100px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: 3px solid #000;
+}
+
+.scoreboard-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.scoreboard-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(0.4);
+}
+
+.sb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+.scoreboard-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 100px;
+  color: white;
+}
+
+.team-location {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: #888;
+  letter-spacing: 0.3em;
+  margin-bottom: 10px;
+}
+
+.team-name {
+  font-family: var(--font-heading);
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.score-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.runs {
+  font-size: 6rem;
+  font-weight: 900;
+  font-family: var(--font-body);
+  line-height: 1;
+}
+
+.wickets {
+  font-size: 3rem;
+  font-weight: 400;
+  color: #AAA;
+}
+
+.overs {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #666;
+}
+
+.vs-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.vs-line {
+  width: 1px;
+  height: 60px;
+  background: rgba(255,255,255,0.2);
+}
+
+.vs-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.2);
+}
+
+.team-right {
+  text-align: right;
+}
+
+.team-right .score-wrap {
+  justify-content: flex-end;
+}
+
+.target-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: #888;
+  margin-right: 20px;
+}
+
+.target-runs {
+  font-size: 6rem;
+  font-weight: 900;
+  font-family: var(--font-body);
+}
+
+.status {
+  display: block;
+  margin-top: 15px;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  color: #00FF00;
+  letter-spacing: 0.1em;
+}
+
+/* ─── Match Hero ─────────────────────────────────────────── */
+
+.match-hero {
+  max-width: var(--max-width);
+  margin: 0 auto 60px;
+  padding: 0 40px;
+}
+
+.pitch-visual-wrapper {
+  position: relative;
+  height: 600px;
+  overflow: hidden;
+  border: 3px solid #000;
+}
+
+.pitch-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(0.8);
+  transition: all 0.8s ease;
+}
+
+.pitch-visual-wrapper:hover .pitch-img {
+  filter: grayscale(0) brightness(1);
+}
+
+.hud-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hud-box {
+  position: absolute;
+  padding: 25px 40px;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(20px);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.top-left { top: 60px; left: 60px; }
+.bottom-right { bottom: 60px; right: 60px; text-align: right; }
+
+.hud-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  margin-bottom: 5px;
+  opacity: 0.6;
+}
+
+.hud-value {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+/* ─── Intel Grid ─────────────────────────────────────────── */
+
+.intel-grid {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 40px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+}
+
+.intel-panel {
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+  border: 3px solid #000;
+}
+
+.panel-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.panel-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(0.15);
+}
+
+.p-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+
+.panel-content {
+  position: relative;
+  z-index: 1;
+  padding: 50px;
+  color: white;
+}
+
+.over-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.over-num { font-weight: 800; font-family: var(--font-body); font-size: 1.2rem; }
+.over-bowler { font-size: 0.8rem; color: #666; font-family: var(--font-display); }
+
+.ball-list {
+  display: flex;
+  gap: 12px;
+}
+
+.ball {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.ball.six { background: white; color: black; border: none; }
+.ball.wicket { background: var(--color-accent); color: white; border: none; }
+
+.lineup-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.side-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+.technical-blueprint .player-card {
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  padding: 20px 0;
+  margin-bottom: 0;
+  transition: all 0.3s ease;
+}
+
+.technical-blueprint .player-card.active {
+  border-bottom: 1px solid white;
+  padding-left: 20px;
+}
+
+.technical-blueprint .player-card:last-child {
+  border-bottom: none;
+}
+
+.p-name { display: block; font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; color: white; }
+.p-stats { font-size: 0.85rem; color: #888; font-family: var(--font-body); }
+
+/* ─── Ticker ─────────────────────────────────────────────── */
+
+.event-ticker {
+  margin-top: 100px;
+  background: var(--color-black);
+  color: white;
+  padding: 30px 0;
+  overflow: hidden;
+}
+
+.ticker-wrap {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 40s linear infinite;
+}
+
+.ticker-item {
+  padding: 0 60px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+}
+
+@keyframes ticker {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (max-width: 1000px) {
+  .scoreboard-section { height: auto; padding: 100px 0; }
+  .scoreboard-main { padding: 0 40px; flex-direction: column; gap: 60px; text-align: center; }
+  .team-right { text-align: center; }
+  .team-right .score-wrap { justify-content: center; }
+  .intel-grid { grid-template-columns: 1fr; }
+}

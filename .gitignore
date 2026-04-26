@@ -1,0 +1,27 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node / Vite
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Logs and generated scratch output
+*.log
+import_time.txt
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
