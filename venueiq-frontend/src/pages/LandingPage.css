@@ -24,7 +24,7 @@
   padding: 8px 14px;
   border: 1px solid #000;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 650;
   text-transform: uppercase;
 }
 
@@ -36,11 +36,12 @@
 }
 
 .hero-headline {
-  max-width: 980px;
+  max-width: none;
   margin: 28px auto 18px;
-  font-size: clamp(3rem, 8vw, 7.4rem);
-  line-height: 0.9;
-  font-weight: 950;
+  font-size: clamp(3rem, 6.4vw, 5.9rem);
+  line-height: 1;
+  font-weight: 650;
+  white-space: nowrap;
 }
 
 .hero-subtext {
@@ -68,7 +69,7 @@
   min-height: 48px;
   padding: 0 24px;
   border: 2px solid #000;
-  font-weight: 900;
+  font-weight: 700;
   text-decoration: none;
   text-transform: uppercase;
 }
@@ -116,7 +117,7 @@
 .hero-stat-value {
   display: block;
   font-size: clamp(1.8rem, 4vw, 3.2rem);
-  font-weight: 950;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -124,7 +125,7 @@
   display: block;
   margin-top: 8px;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 650;
   text-transform: uppercase;
 }
 
@@ -152,7 +153,7 @@
 .ticker-text {
   padding: 16px 28px;
   font-size: clamp(1.1rem, 3vw, 2.2rem);
-  font-weight: 950;
+  font-weight: 650;
 }
 
 @keyframes marquee {
@@ -176,7 +177,7 @@
 .features-label {
   display: block;
   font-size: 0.75rem;
-  font-weight: 900;
+  font-weight: 650;
   text-transform: uppercase;
   color: var(--color-accent);
 }
@@ -185,7 +186,8 @@
 .features-title {
   max-width: 900px;
   font-size: clamp(2rem, 5vw, 4.8rem);
-  line-height: 0.95;
+  line-height: 1.02;
+  font-weight: 650;
 }
 
 .showcase-subtitle {
@@ -233,7 +235,7 @@
   background: #fff;
   border: 2px solid #000;
   padding: 4px 8px;
-  font-weight: 950;
+  font-weight: 700;
 }
 
 .showcase-card-body,
@@ -244,6 +246,7 @@
 .showcase-card-title,
 .feature-card h3 {
   font-size: 1.05rem;
+  font-weight: 650;
   margin-bottom: 10px;
 }
 
@@ -255,7 +258,7 @@
 .showcase-card-accent {
   display: block;
   margin-top: 18px;
-  font-weight: 900;
+  font-weight: 650;
 }
 
 .features {
@@ -319,7 +322,8 @@
 
 .cta-headline {
   font-size: clamp(2.8rem, 8vw, 7rem);
-  line-height: 0.92;
+  line-height: 0.98;
+  font-weight: 650;
 }
 
 .cta-subtext {
@@ -342,6 +346,10 @@
 @media (max-width: 900px) {
   .hero {
     padding-top: 40px;
+  }
+
+  .hero-headline {
+    white-space: normal;
   }
 
   .hero-stats,

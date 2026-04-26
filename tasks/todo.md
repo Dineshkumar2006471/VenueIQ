@@ -94,3 +94,26 @@ Notes:
 
 - Local Docker build could not run because Docker Desktop's Linux engine was not running.
 - Cloud Build successfully built the frontend container from `cloudbuild.yaml`.
+
+## Landing Page Typography Correction
+
+- [x] Inspect current landing page heading styles.
+- [x] Reduce over-bold home page heading weights.
+- [x] Keep the desktop hero heading on one line while preserving mobile wrapping.
+- [x] Run frontend verification.
+- [x] Deploy corrected frontend to Cloud Run.
+
+Requested adjustment:
+
+- Restore the home page heading feel closer to the previous lighter version.
+- Reduce hero section header boldness and keep it in one line on desktop.
+- Reduce over-boldness in other home page headers only.
+
+Verification performed:
+
+- Frontend `npm run lint` passed.
+- Frontend `npm run build` passed outside the Windows sandbox.
+- Cloud Build rebuilt the frontend image successfully.
+- Cloud Run frontend revision `venueiq-frontend-00002-t7r` is serving 100 percent of traffic.
+- Deployed frontend `/health` returned `ok`.
+- Deployed CSS contains the lighter heading weight and desktop single-line hero rule.
