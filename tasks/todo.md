@@ -9,7 +9,7 @@
 - [x] Create or update root project documentation in `README.md`.
 - [x] Add repository hygiene files so generated files and secrets are not committed.
 - [x] Re-run verification after documentation and hygiene changes.
-- [ ] Initialize git, commit the intended files, configure GitHub remote, and push to `main`.
+- [x] Initialize git, commit the intended files, configure GitHub remote, and push to `main`.
 
 ## Review
 
