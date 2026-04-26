@@ -117,3 +117,21 @@ Verification performed:
 - Cloud Run frontend revision `venueiq-frontend-00002-t7r` is serving 100 percent of traffic.
 - Deployed frontend `/health` returned `ok`.
 - Deployed CSS contains the lighter heading weight and desktop single-line hero rule.
+
+## Competition README Upgrade
+
+- [x] Inspect current README and codebase architecture.
+- [x] Rewrite README for Agentic Premier League jury and AI analyzer review.
+- [x] Verify README formatting and repository status.
+- [ ] Commit and push README update.
+
+Goal:
+
+- Make the submission easy to evaluate for problem relevance, agentic design, Google Cloud usage, UI quality, deployment readiness, and verification evidence.
+
+Verification performed:
+
+- Replaced mojibake tree formatting with ASCII-safe repository structure.
+- Ran `git diff --check`.
+- Checked README for common encoding artifacts.
+- Checked README for accidental real secret values; only placeholder secret text remains.
