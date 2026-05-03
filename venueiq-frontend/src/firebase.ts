@@ -2,7 +2,7 @@
 // Used for direct Firestore reads/writes from the frontend
 // Community posts and organizer advisories use onSnapshot for real-time updates
 
-import { initializeApp } from 'firebase/app'
+import { getApp, getApps, initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -14,5 +14,8 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:000000000000:web:000000000000',
 }
 
-const app = initializeApp(firebaseConfig)
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
 export const db = getFirestore(app)
+export const firestoreClientEnabled =
+  !firebaseConfig.apiKey.includes('placeholder') &&
+  firebaseConfig.projectId.length > 0
