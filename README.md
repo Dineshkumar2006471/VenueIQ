@@ -74,7 +74,7 @@ Report a spill in Sector B.
 
 ## Product Experience
 
-The project includes five major frontend surfaces.
+The project includes six major frontend surfaces.
 
 | Route | Purpose |
 | --- | --- |
@@ -82,6 +82,7 @@ The project includes five major frontend surfaces.
 | `/chat` | Streaming AI concierge interface for fan and operator queries. |
 | `/dashboard` | Live venue status view for crowd, queue, security, and telemetry signals. |
 | `/match` | Cricket match intelligence page with live score context. |
+| `/community` | Real-time fan field reports and organizer advisories powered by Firestore listeners. |
 | `/admin` | Operator console for incidents, heatmap view, and public access QR. |
 
 The frontend is intentionally visual because the submission is not just a backend proof of concept. It presents the idea as a product that could be used by fans, stadium operations teams, and event organizers.
@@ -185,6 +186,8 @@ Firestore collections used by the backend:
 | `navigation` | Destination lookup and facility routing. |
 | `match_data` | Seeded or fallback live match state. |
 | `incident_reports` | Operator workflow for reported issues. |
+| `community_posts` | Fan-submitted real-time feed posts shown in Community. |
+| `organizer_advisories` | Official venue advisories (including pinned alerts) shown in Community. |
 
 The repository includes scripts for seeding and validating Firestore demo data:
 
@@ -192,6 +195,7 @@ The repository includes scripts for seeding and validating Firestore demo data:
 cd venueiq-backend
 python scripts/seed_stadium.py
 python scripts/seed_match_live.py
+python scripts/seed_community.py
 python scripts/verify_seed.py
 python scripts/simulate_live.py
 ```
@@ -252,12 +256,24 @@ Important files:
 | `venueiq-frontend/src/pages/ChatPage.tsx` | Streaming concierge UI. |
 | `venueiq-frontend/src/pages/DashboardPage.tsx` | Venue telemetry dashboard. |
 | `venueiq-frontend/src/pages/MatchPage.tsx` | Match intelligence interface. |
+| `venueiq-frontend/src/pages/CommunityPage.tsx` | Real-time fan feed + organizer advisories UI. |
 | `venueiq-frontend/src/pages/AdminPage.tsx` | Incident operations console and heatmap. |
 
 The frontend reads `VITE_API_URL` at build time. The deployed Cloud Run frontend is built with:
 
 ```text
 VITE_API_URL=https://venueiq-backend-857911435032.us-central1.run.app
+```
+
+Firebase client configuration for the Community feed is read from frontend environment variables:
+
+```text
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
 ```
 
 ## Repository Structure

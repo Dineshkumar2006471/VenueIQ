@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { QRCodeSVG } from 'qrcode.react'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { db } from '../firebase'
 import './AdminPage.css'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
@@ -15,6 +17,28 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'incidents'|'qr'|'heatmap'>('incidents')
   const [filterStatus, setFilterStatus] = useState('all')
+  const [advText, setAdvText] = useState('')
+  const [advSeverity, setAdvSeverity] = useState<'info'|'warning'|'critical'>('info')
+  const [advSubmitting, setAdvSubmitting] = useState(false)
+  const [advSuccess, setAdvSuccess] = useState(false)
+
+  const handlePostAdvisory = async () => {
+    if (!advText.trim()) return
+    setAdvSubmitting(true)
+    try {
+      await addDoc(collection(db, 'organizer_advisories'), {
+        text: advText.trim(),
+        author_name: 'VenueIQ Operations',
+        severity: advSeverity,
+        target: 'stadium-wide',
+        timestamp: serverTimestamp(),
+        is_advisory: true,
+        is_pinned: advSeverity === 'critical',
+      })
+      setAdvText(''); setAdvSuccess(true); setTimeout(() => setAdvSuccess(false), 3000)
+    } catch (err) { console.error('Advisory post failed:', err) }
+    finally { setAdvSubmitting(false) }
+  }
 
   const fetchIncidents = async () => {
     try {
@@ -60,6 +84,37 @@ export default function AdminPage() {
         <h1 className="admin-title">Operations Console</h1>
         <p className="admin-subtitle">VenueIQ Command Center — Real-time Intelligence</p>
       </header>
+
+      {/* ─── Organizer Advisory Composer ──────────────────────── */}
+      <section className="advisory-composer">
+        <div className="adv-composer-header">
+          <span className="adv-composer-icon">📢</span>
+          <div>
+            <h2 className="adv-composer-title">Post Official Advisory</h2>
+            <p className="adv-composer-desc">Advisories appear in the Community Feed with a verified badge and are visible to all 132,000 fans.</p>
+          </div>
+        </div>
+        <textarea
+          className="adv-textarea"
+          placeholder="Write an official advisory... e.g., 'Gate 9 temporarily closed for maintenance. Please use Gate 8.'"
+          value={advText}
+          onChange={e => setAdvText(e.target.value)}
+          rows={3}
+        />
+        <div className="adv-controls">
+          <div className="severity-selector">
+            {(['info','warning','critical'] as const).map(s => (
+              <button key={s} className={`sev-btn ${advSeverity===s?'active':''} sev-btn-${s}`} onClick={()=>setAdvSeverity(s)}>
+                {s === 'info' ? 'ℹ️' : s === 'warning' ? '⚠️' : '🚨'} {s.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          <button className="adv-post-btn" onClick={handlePostAdvisory} disabled={advSubmitting || !advText.trim()}>
+            {advSubmitting ? 'Publishing...' : '🔒 Publish Advisory'}
+          </button>
+        </div>
+        {advSuccess && <div className="adv-success">✅ Advisory published! It's now live in the Community Feed with a verified badge.</div>}
+      </section>
 
       <nav className="admin-tabs">
         {(['incidents','heatmap','qr'] as const).map(t => (

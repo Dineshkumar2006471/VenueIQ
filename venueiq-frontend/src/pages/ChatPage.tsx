@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import './ChatPage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
@@ -13,7 +14,7 @@ const ChatPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     { 
       role: 'assistant', 
-      text: 'Neural Link Established. Accessing Narendra Modi Stadium core telemetry. How can I assist your operation?',
+      text: 'Neural Link Established. Accessing stadium core telemetry. How can I assist your operation today?',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -60,7 +61,6 @@ const ChatPage: React.FC = () => {
       const decoder = new TextDecoder();
       assistantTextRef.current = "";
       
-      // Add empty assistant message to start streaming into
       const initialAssistantMessage: Message = {
         role: 'assistant',
         text: "",
@@ -75,7 +75,6 @@ const ChatPage: React.FC = () => {
         const chunk = decoder.decode(value, { stream: true });
         assistantTextRef.current += chunk;
         
-        // Update the last message with the cumulative text
         setMessages(prev => {
           const newMessages = [...prev];
           newMessages[newMessages.length - 1].text = assistantTextRef.current;
@@ -99,166 +98,170 @@ const ChatPage: React.FC = () => {
     "What is the live score?",
     "Shortest queue for food?",
     "Quickest gate to exit?",
-    "Match prediction?",
-    "Report a spill in Sector B"
+    "Match prediction?"
   ];
 
   return (
-    <div className="chat-container">
-      {/* ─── Page Background ───────────────────────────────────── */}
-      <div className="neural-bg">
-        <img src="/abstract_neural_mesh_dark_1777155688379.png" alt="Neural Mesh" />
-        <div className="bg-overlay"></div>
-      </div>
-
-      <div className="terminal-grid">
-        {/* ─── Sidebar: Protocols ──────────────────────────────── */}
-        <aside className="terminal-sidebar protocols reveal active">
-          <div className="sidebar-bg">
-            <img src="/stadium_crowd_monitoring_neural_1777155660879.png" alt="Monitoring" />
-            <div className="sidebar-overlay"></div>
-          </div>
-          <div className="sidebar-content">
-            <div className="sidebar-header">
-              <span className="section-label">SYSTEM PROTOCOLS</span>
+    <div className="chat-page">
+      <section className="chat-hero">
+        <div className="chat-hero-bg"></div>
+        <div className="chat-hero-overlay"></div>
+        <div className="chat-hero-content container-narrow">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
+            <div className="eyebrow">
+              <span className="live-pulse"></span>
+              NEURAL LINK ACTIVE
             </div>
-            <nav className="protocol-nav technical-blueprint">
+            <h1 className="hero-title">Concierge <span className="accent-text">Intelligence</span></h1>
+            <p className="hero-story">
+              Direct access to real-time stadium telemetry. Ask about crowd flow, food queues, gate density, or incident reports.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="chat-body container-narrow">
+        
+        {/* Sidebar Context */}
+        <motion.aside 
+          className="chat-sidebar"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="sidebar-info-block">
+            <h3 className="eyebrow">Active Mesh Protocols</h3>
+            <div className="protocol-list">
               {[
                 { id: 'P-01', name: 'CROWD FLOW', status: 'ACTIVE' },
                 { id: 'P-04', name: 'GATE REROUTE', status: 'READY' },
                 { id: 'P-07', name: 'SENTRY MESH', status: 'STABLE' },
-                { id: 'P-12', name: 'EVAC PROTOCOL', status: 'STANDBY' }
               ].map((p) => (
-                <div key={p.id} className={`protocol-item ${p.status === 'ACTIVE' ? 'active' : ''}`}>
-                  <span className="p-id">{p.id}</span>
-                  <span className="p-name">{p.name}</span>
-                  <span className="p-status">{p.status}</span>
+                <div key={p.id} className="protocol-card card">
+                  <div className="protocol-info">
+                    <span className="protocol-id">{p.id}</span>
+                    <span className="protocol-name">{p.name}</span>
+                  </div>
+                  <span className={`protocol-status ${p.status === 'ACTIVE' ? 'status-active' : ''}`}>
+                    {p.status}
+                  </span>
                 </div>
               ))}
-            </nav>
-            <div className="connection-status">
-              <div className="pulse-dot"></div>
-              <span>STADIUM MESH LINKED</span>
             </div>
           </div>
-        </aside>
 
-        {/* ─── Main: Intelligence Feed ─────────────────────────── */}
-        <main className="terminal-main reveal active">
-          <div className="terminal-header">
-            <div className="header-top">
-              <h1 className="terminal-title">NEURAL CONCIERGE</h1>
-              <div className="live-tag">LIVE FEED</div>
+          <div className="sidebar-info-block">
+            <h3 className="eyebrow">Spatial Context</h3>
+            <div className="context-card card">
+              <h4 className="context-zone">Sardar Patel Zone</h4>
+              <div className="context-metrics">
+                <div className="metric">
+                  <span className="metric-label">Occupancy</span>
+                  <span className="metric-val">94.2%</span>
+                </div>
+                <div className="metric">
+                  <span className="metric-label">Flow Rate</span>
+                  <span className="metric-val">120<span className="text-muted">/m</span></span>
+                </div>
+              </div>
             </div>
-            <span className="terminal-subtitle">Direct Access to VenueIQ Core Intelligence Mesh</span>
           </div>
+        </motion.aside>
 
-          <div className="chat-window">
+        {/* Chat Feed */}
+        <motion.main 
+          className="chat-main card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="chat-feed">
             {messages.map((msg, i) => (
-              <div key={i} className={`message-row ${msg.role}`}>
-                <div className="message-meta">
-                  <span className="msg-sender">{msg.role === 'assistant' ? 'VENUE_IQ' : 'OPERATOR'}</span>
-                  <span className="msg-time">{msg.time}</span>
-                </div>
-                <div className="message-content">
-                  <p>{msg.text}</p>
-                </div>
-              </div>
-            ))}
-            {isProcessing && (
-              <div className="message-row assistant processing">
-                <div className="message-meta">
-                  <span className="msg-sender">VENUE_IQ</span>
-                  <span className="msg-time">SYS_PROG</span>
-                </div>
-                <div className="message-content">
-                  <div className="loading-dots">
-                    <span>.</span><span>.</span><span>.</span>
+              <motion.div 
+                key={i} 
+                className={`message-row ${msg.role}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {msg.role === 'assistant' && (
+                  <div className="avatar assistant-avatar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                   </div>
-                  <p className="processing-text">NEURAL PROCESSING...</p>
+                )}
+                <div className="message-content">
+                  <span className="message-sender">{msg.role === 'assistant' ? 'VenueIQ AI' : 'You'}</span>
+                  <div className={`bubble ${msg.role}`}>
+                    <p>{msg.text}</p>
+                  </div>
+                  <span className="message-time">{msg.time}</span>
                 </div>
-              </div>
+              </motion.div>
+            ))}
+            
+            {isProcessing && (
+              <motion.div 
+                className="message-row assistant"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <div className="avatar assistant-avatar">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                </div>
+                <div className="message-content">
+                  <span className="message-sender">VenueIQ AI</span>
+                  <div className="bubble assistant processing-bubble">
+                    <span className="dot"></span><span className="dot"></span><span className="dot"></span>
+                  </div>
+                </div>
+              </motion.div>
             )}
             <div ref={chatEndRef} />
           </div>
 
-          <div className="quick-queries">
-            {quickQueries.map((q, i) => (
-              <button 
-                key={i} 
-                className="query-chip"
-                onClick={() => handleSend(q)}
-                disabled={isProcessing}
-              >
-                {q}
-              </button>
-            ))}
-          </div>
-
           <div className="chat-input-area">
-            <div className="input-wrapper">
-              <div className="input-prompt">IQ_SYS:/&gt;</div>
+            <div className="quick-queries-list">
+              {quickQueries.map((q, i) => (
+                <button 
+                  key={i} 
+                  className="suggestion-chip" 
+                  onClick={() => handleSend(q)} 
+                  disabled={isProcessing}
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+            
+            <div className="input-container">
               <input 
                 type="text" 
-                placeholder="QUERY NEURAL MESH..." 
+                placeholder="Message VenueIQ Concierge..." 
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 disabled={isProcessing}
               />
-              <button className="send-btn" onClick={() => handleSend()} disabled={isProcessing}>
-                {isProcessing ? 'BUSY' : 'EXECUTE'}
+              <button 
+                className="btn-primary input-submit-btn" 
+                onClick={() => handleSend()} 
+                disabled={isProcessing || !input.trim()}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
               </button>
             </div>
+            
+            <p className="disclaimer-text">
+              VenueIQ AI provides real-time telemetry but can make mistakes. Always verify critical evacuation routes.
+            </p>
           </div>
-        </main>
-
-        {/* ─── Right: Spatial Context ──────────────────────────── */}
-        <aside className="terminal-sidebar context reveal active">
-          <div className="sidebar-bg">
-            <img src="/stadium_security_command_center_1777155705835.png" alt="Command Center" />
-            <div className="sidebar-overlay"></div>
-          </div>
-          <div className="sidebar-content">
-            <div className="sidebar-header">
-              <span className="section-label">SPATIAL CONTEXT</span>
-            </div>
-            <div className="context-card technical-blueprint">
-              <h4 className="card-title">SARDAR PATEL ZONE</h4>
-              <div className="context-metrics">
-                <div className="c-metric">
-                  <span className="c-label">OCCUPANCY</span>
-                  <span className="c-val">94.2%</span>
-                </div>
-                <div className="c-metric">
-                  <span className="c-label">FLOW RATE</span>
-                  <span className="c-val">120P/M</span>
-                </div>
-              </div>
-              <div className="mini-map">
-                <div className="map-grid"></div>
-                <div className="map-radar"></div>
-                <div className="map-dot"></div>
-              </div>
-            </div>
-
-            <div className="history-list technical-blueprint">
-              <span className="history-label">RECENT ACTIONS</span>
-              <div className="history-item">
-                <span className="h-time">14:15</span>
-                <span className="h-text">SYSTEM INITIATED GATE REROUTE AT ZONE 4</span>
-              </div>
-              <div className="history-item">
-                <span className="h-time">14:10</span>
-                <span className="h-text">HVAC OPTIMIZED - SECTOR D</span>
-              </div>
-              <div className="history-item">
-                <span className="h-time">14:02</span>
-                <span className="h-text">ANOMALY DETECTED IN NORTH STAND - RESOLVED</span>
-              </div>
-            </div>
-          </div>
-        </aside>
+        </motion.main>
       </div>
     </div>
   );

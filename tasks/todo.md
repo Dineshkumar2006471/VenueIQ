@@ -135,3 +135,45 @@ Verification performed:
 - Ran `git diff --check`.
 - Checked README for common encoding artifacts.
 - Checked README for accidental real secret values; only placeholder secret text remains.
+
+## Jury Readiness Full Audit (2026-05-03)
+
+- [ ] Baseline scan of all source and markdown files (frontend, backend, docs) to map architecture and risk areas.
+- [ ] Run frontend quality gates (install, lint, build) and capture failures.
+- [ ] Run backend quality gates (dependency check, static compile/import, API smoke tests) and capture failures.
+- [ ] Validate frontend-backend integration contracts (routes, payload shape, env vars, CORS, streaming chat path).
+- [ ] Validate Firestore integration points (collection names, required fields, failure handling, seed scripts).
+- [ ] Fix all discovered code issues with minimal safe patches.
+- [ ] Re-run full verification after fixes.
+- [ ] Update root README with current architecture, feature updates, setup, and verification evidence.
+- [ ] Commit and push only after local verification passes.
+
+## Jury Readiness Full Audit (2026-05-03) - Results
+
+- [x] Baseline scan of all source and markdown files (frontend, backend, docs) to map architecture and risk areas.
+- [x] Run frontend quality gates (install, lint, build) and capture failures.
+- [x] Run backend quality gates (dependency check, static compile/import, API smoke tests) and capture failures.
+- [x] Validate frontend-backend integration contracts (routes, payload shape, env vars, CORS, streaming chat path).
+- [x] Validate Firestore integration points (collection names, required fields, failure handling, seed scripts).
+- [x] Fix all discovered code issues with minimal safe patches.
+- [x] Re-run full verification after fixes.
+- [x] Update root README with current architecture, feature updates, setup, and verification evidence.
+- [ ] Commit and push only after local verification passes.
+
+### Review
+
+Issues found and fixed:
+- Fixed frontend build/lint blockers in `ChatPage.tsx` (unused animation variables, transition typing).
+- Fixed frontend build/lint blockers in `CommunityPage.tsx` (impure `Date.now()` during render and motion transition typing).
+- Updated Community hero typography colors for readability against hero image.
+- Switched Firebase client config to env-based values in `src/firebase.ts` and added `venueiq-frontend/.env.example`.
+- Updated root `README.md` to include Community route, Firestore collections, seed script, and frontend Firebase env vars.
+
+Verification run:
+- Frontend: `npm run lint` passed.
+- Frontend: `npm run build` passed.
+- Backend: `python -m py_compile main.py cricket_api.py venueiq_agents\\agent.py venueiq_agents\\lightweight_lib.py` passed.
+- Backend: `python -c "import main; print(main.app.title); print([r.path for r in main.app.routes])"` passed.
+- Backend API smoke: `/health`, `/api/matches/primary`, `/admin/incidents` returned HTTP 200.
+- Backend chat smoke: `POST /chat` returned HTTP 200.
+- Backend scripts: `python test_api.py`, `python test_chat.py`, `python test_firestore.py` passed in current environment.

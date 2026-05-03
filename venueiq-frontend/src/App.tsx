@@ -5,6 +5,7 @@ import ChatPage from './pages/ChatPage'
 import DashboardPage from './pages/DashboardPage'
 import MatchPage from './pages/MatchPage'
 import AdminPage from './pages/AdminPage'
+import CommunityPage from './pages/CommunityPage'
 import './App.css'
 
 function AppContent() {
@@ -83,6 +84,9 @@ function AppContent() {
             <NavLink to="/match" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
               Match
             </NavLink>
+            <NavLink to="/community" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
+              Community
+            </NavLink>
             <NavLink to="/chat" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
               Concierge
             </NavLink>
@@ -109,6 +113,7 @@ function AppContent() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/match" element={<MatchPage />} />
+          <Route path="/community" element={<CommunityPage />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </main>
