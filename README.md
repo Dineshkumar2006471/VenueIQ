@@ -1,5 +1,7 @@
 # VenueIQ - Agentic Smart Venue Intelligence
 
+**🎥 [Project Demo Video](https://drive.google.com/file/d/10mMo8EaIczYdavJ8tyxFQHLgMRgG8wJq/view?usp=drive_link)**
+
 VenueIQ is an AI-powered smart venue intelligence system built for Agentic Premier League 2026 by Google Cloud / Build with AI.
 
 The project turns a large cricket stadium into an intelligent, conversational venue assistant. It models a match-day experience at Narendra Modi Stadium, Ahmedabad, where fans and operators need real-time help with food queues, gates, navigation, live match context, crowd load, and incident reporting.
